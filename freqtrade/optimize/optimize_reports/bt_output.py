@@ -284,7 +284,16 @@ def show_backtest_result(strategy: str, results: Dict[str, Any], stake_currency:
     """
     # Print results
     print(f"Result for strategy {strategy}")
+
     table = text_table_bt_results(results['results_per_pair'], stake_currency=stake_currency)
+    pair_results = results['results_per_pair']
+    profit_pairs = [t['key'] for t in pair_results if t['profit_mean_pct'] > 1 and t['key'] != 'TOTAL']
+    black_pairs = [t['key'] for t in pair_results if t['profit_mean_pct'] < 0 and t['key'] != 'TOTAL']
+    print(' PROFIT PAIRS '.center(len(table.splitlines()[0]), '='))
+    print(profit_pairs)
+    print(' BLACK PAIRS '.center(len(table.splitlines()[0]), '='))
+    print(black_pairs)
+
     if isinstance(table, str):
         print(' BACKTESTING REPORT '.center(len(table.splitlines()[0]), '='))
     print(table)
